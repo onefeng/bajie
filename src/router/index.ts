@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { isLoggedIn } from '@/utils/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,13 +18,11 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const isLoggedIn = Boolean(localStorage.getItem('bajie_token') || localStorage.getItem('bajie_login_data'))
-
-  if (to.name !== 'login' && !isLoggedIn) {
+  if (to.name !== 'login' && !isLoggedIn()) {
     return { name: 'login' }
   }
 
-  if (to.name === 'login' && isLoggedIn) {
+  if (to.name === 'login' && isLoggedIn()) {
     return { name: 'home' }
   }
 

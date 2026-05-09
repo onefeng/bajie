@@ -156,9 +156,10 @@
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { clearLoginSession, getUsername } from '@/utils/auth'
 
 const router = useRouter()
-const username = localStorage.getItem('bajie_username') || 'admin'
+const username = getUsername()
 const activeRange = ref('7D')
 
 const metrics = [
@@ -199,9 +200,7 @@ const policies = reactive([
 ])
 
 const logout = async () => {
-  localStorage.removeItem('bajie_token')
-  localStorage.removeItem('bajie_login_data')
-  localStorage.removeItem('bajie_username')
+  clearLoginSession()
   ElMessage.success('已退出登录')
   await router.replace({ name: 'login' })
 }

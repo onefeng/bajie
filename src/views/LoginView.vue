@@ -66,33 +66,14 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-
-interface ApiEnvelope<T = unknown> {
-  code?: number
-  message?: string
-  data?: T
-}
-
-interface CaptchaData {
-  captcha_id?: string
-  captcha_image?: string
-}
-
-interface LoginData {
-  token?: string
-  access_token?: string
-  [key: string]: unknown
-}
+import { getCaptcha, login } from '@/api/user'
+import { saveLoginSession } from '@/utils/auth'
+import { getErrorMessage } from '@/utils/http'
 
 const router = useRouter()
-const http = axios.create({
-  baseURL: '/api',
-  timeout: 10000,
-})
 
 const loginFormRef = ref<FormInstance>()
 const captchaImage = ref('')
@@ -112,20 +93,11 @@ const rules: FormRules = {
   captcha_code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 }
 
-const pickMessage = (error: unknown, fallback: string) => {
-  if (axios.isAxiosError<ApiEnvelope>(error)) {
-    return error.response?.data?.message || error.message || fallback
-  }
-
-  return fallback
-}
-
 const loadCaptcha = async () => {
   captchaLoading.value = true
 
   try {
-    const { data } = await http.get<ApiEnvelope<CaptchaData>>('/v1/user/captcha')
-    const captcha = data.data || {}
+    const captcha = await getCaptcha()
 
     form.captcha_id = captcha.captcha_id || ''
     captchaImage.value = captcha.captcha_image || ''
@@ -135,7 +107,7 @@ const loadCaptcha = async () => {
       ElMessage.warning('验证码返回数据不完整')
     }
   } catch (error) {
-    ElMessage.error(pickMessage(error, '验证码加载失败'))
+    ElMessage.error(getErrorMessage(error, '验证码加载失败'))
   } finally {
     captchaLoading.value = false
   }
@@ -150,29 +122,19 @@ const submitLogin = async () => {
   loginLoading.value = true
 
   try {
-    const { data } = await http.post<ApiEnvelope<LoginData>>('/v1/user/login', {
+    const result = await login({
       username: form.username,
       password: form.password,
       captcha_id: form.captcha_id,
       captcha_code: form.captcha_code,
     })
 
-    if (typeof data.code === 'number' && data.code !== 0) {
-      throw new Error(data.message || '登录失败')
-    }
+    saveLoginSession(form.username, result.data, result.raw)
 
-    const token = data.data?.token || data.data?.access_token || ''
-    if (token) {
-      localStorage.setItem('bajie_token', token)
-    }
-
-    localStorage.setItem('bajie_login_data', JSON.stringify(data.data || data))
-    localStorage.setItem('bajie_username', form.username)
-
-    ElMessage.success(data.message || '登录成功')
+    ElMessage.success(result.message || '登录成功')
     await router.replace({ name: 'home' })
   } catch (error) {
-    ElMessage.error(error instanceof Error ? error.message : pickMessage(error, '登录失败'))
+    ElMessage.error(getErrorMessage(error, '登录失败'))
     await loadCaptcha()
   } finally {
     loginLoading.value = false
