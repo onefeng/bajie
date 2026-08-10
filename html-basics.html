@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>onefeng</title>
+    <link rel="stylesheet" href="./html-basics.css" />
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>我的前端学习计划</h1>
+
+      <p>你好，我是onefeng！ 正在学习中。。。</p>
+
+      <h2>我要学习的内容</h2>
+      <div class="course-summary">
+        <div>
+          <span>课程总数</span>
+          <strong id="total-course-count">0</strong>
+        </div>
+
+        <div>
+          <span>已完成</span>
+          <strong id="completed-course-count">0</strong>
+        </div>
+
+        <div>
+          <span>学习进度</span>
+          <strong id="course-progress-text">0%</strong>
+        </div>
+      </div>
+
+      <div class="progress-track">
+        <div id="course-progress-bar" class="progress-bar"></div>
+      </div>
+      <div class="course-filter">
+        <label for="filter-status">课程筛选</label>
+
+        <select id="filter-status">
+          <option value="全部">全部</option>
+          <option value="待学习">待学习</option>
+          <option value="学习中">学习中</option>
+          <option value="已完成">已完成</option>
+        </select>
+
+        <span id="course-count"></span>
+      </div>
+      <ul id="learning-list" class="learning-list"></ul>
+
+      <div class="course-editor">
+        <input id="course-name" placeholder="请输入课程名称" />
+
+        <select id="course-status">
+          <option value="待学习">待学习</option>
+          <option value="学习中">学习中</option>
+          <option value="已完成">已完成</option>
+        </select>
+
+        <button id="add-course" type="button">添加</button>
+      </div>
+
+      <h2>登录练习</h2>
+
+      <form class="login-form">
+        <input id="username" placeholder="请输入用户名" />
+        <input id="password" type="password" placeholder="请输入密码" />
+
+        <div class="form-options">
+          <span>请妥善保管账号密码</span>
+          <a href="#">忘记密码</a>
+        </div>
+        <p id="form-message" class="form-message"></p>
+
+        <div class="form-actions">
+          <button class="reset-button" type="reset">重置</button>
+          <button id="login-button" type="submit">登录</button>
+        </div>
+      </form>
+    </div>
+    <script type="module" src="/html-basics.js"></script>
+  </body>
+</html>

@@ -1,0 +1,292 @@
+* {
+  box-sizing: border-box;
+}
+.card > h1 {
+  color: #3b832b;
+  margin-top: 0;
+}
+.learning-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: #4b5563;
+}
+.delete-course-button {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  background-color: #dc2626;
+  font-size: 12px;
+}
+
+.delete-course-button:hover {
+  background-color: #b91c1c;
+}
+input[type='password'] {
+  border-color: #3b832b;
+}
+input:focus {
+  border-color: #149f0a;
+  outline: none;
+}
+button:active {
+  transform: scale(0.98);
+}
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3f4f6;
+  color: #333333;
+}
+
+.card {
+  width: 100%;
+  max-width: 500px;
+  padding: 40px 50px;
+  background-color: white;
+  border-radius: 10px;
+  border: 3px solid #dddddd;
+}
+
+.login-form {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input {
+  padding: 12px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #3b832b;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #2f6b23;
+}
+
+a {
+  color: #2563eb;
+  text-align: center;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.form-options span {
+  color: #6b7280;
+  font-size: 14px;
+}
+.form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.form-actions button {
+  flex: 1;
+}
+.reset-button {
+  border: 1px solid #9ca3af;
+  background-color: white;
+  color: #374151;
+}
+
+.reset-button:hover {
+  background-color: #f3f4f6;
+}
+.form-message {
+  min-height: 20px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.form-message.error {
+  color: #dc2626;
+}
+
+.form-message.success {
+  color: #16803a;
+}
+input.input-error {
+  border-color: #dc2626;
+}
+.course-editor {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.course-editor input {
+  flex: 1;
+  min-width: 0;
+}
+
+.course-editor select {
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 14px;
+}
+
+.course-editor button {
+  white-space: nowrap;
+}
+.course-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.course-status-select {
+  padding: 6px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 12px;
+}
+.course-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.course-filter label {
+  font-weight: bold;
+}
+
+.course-filter select {
+  padding: 8px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  background-color: white;
+}
+
+#course-count {
+  margin-left: auto;
+  color: #6b7280;
+  font-size: 14px;
+}
+.course-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.course-summary > div {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f3f4f6;
+  text-align: center;
+}
+
+.course-summary span,
+.course-summary strong {
+  display: block;
+}
+
+.course-summary span {
+  margin-bottom: 6px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.course-summary strong {
+  color: #3b832b;
+  font-size: 20px;
+}
+
+.progress-track {
+  height: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: #e5e7eb;
+}
+
+.progress-bar {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background-color: #3b832b;
+  transition: width 0.3s;
+}
+.form-message.info {
+  color: #2563eb;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+    align-items: flex-start;
+  }
+
+  .card {
+    padding: 24px 20px;
+    border-width: 1px;
+  }
+
+  .card > h1 {
+    font-size: 28px;
+  }
+
+  .form-options {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-actions,
+  .course-editor {
+    flex-direction: column;
+  }
+  .learning-list li {
+    align-items: flex-start;
+  }
+
+  .course-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .course-filter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #course-count {
+    margin-left: 0;
+  }
+  .course-summary {
+    grid-template-columns: 1fr;
+  }
+}
