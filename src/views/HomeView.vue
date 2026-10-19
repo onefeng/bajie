@@ -37,13 +37,37 @@
           <el-button @click="logout">退出</el-button>
         </div>
       </header>
+      <StudyDemo
+        title="我的 Vue 学习计划"
+        @completed="handleStudyCompleted"
+        @reset="handleStudyReset"
+      >
+        <template #default>
+          <p>父组件收到的次数：{{ latestStudyCount }}</p>
+        </template>
+
+        <template #tip>
+          <p>今日目标：认真学习 Vue 组件通信。</p>
+        </template>
+      </StudyDemo>
+      <RouterLink
+        :to="{
+          name: 'study',
+          params: { chapter: 'router' },
+        }"
+      >
+        进入 Vue 学习页面
+      </RouterLink>
 
       <section class="hero-grid">
         <div class="hero-panel">
           <div class="hero-copy">
             <span>实时预算雷达</span>
             <h2>本月已消耗 1,284.6 万 Tokens</h2>
-            <p>较上周增长 12.8%，图像检索链路占比最高，建议重点关注批量任务和夜间峰值。</p>
+            <p>
+              较上周增长
+              12.8%，图像检索链路占比最高，建议重点关注批量任务和夜间峰值。
+            </p>
           </div>
           <div class="orbital-meter" aria-label="本月 token 消耗百分比">
             <div class="meter-core">
@@ -62,10 +86,16 @@
       </section>
 
       <section class="metric-grid">
-        <article v-for="metric in metrics" :key="metric.label" class="metric-card">
+        <article
+          v-for="metric in metrics"
+          :key="metric.label"
+          class="metric-card"
+        >
           <span>{{ metric.label }}</span>
           <strong>{{ metric.value }}</strong>
-          <small :class="{ positive: metric.trend.startsWith('+') }">{{ metric.trend }}</small>
+          <small :class="{ positive: metric.trend.startsWith('+') }">{{
+            metric.trend
+          }}</small>
         </article>
       </section>
 
@@ -76,7 +106,11 @@
               <span>7 日消耗趋势</span>
               <h3>Token Usage Flow</h3>
             </div>
-            <el-segmented v-model="activeRange" :options="['7D', '14D', '30D']" size="small" />
+            <el-segmented
+              v-model="activeRange"
+              :options="['7D', '14D', '30D']"
+              size="small"
+            />
           </div>
           <div class="chart-bars">
             <div v-for="item in dailyUsage" :key="item.day" class="bar-item">
@@ -96,7 +130,11 @@
             </div>
           </div>
           <div class="project-list">
-            <div v-for="project in projects" :key="project.name" class="project-row">
+            <div
+              v-for="project in projects"
+              :key="project.name"
+              class="project-row"
+            >
               <div>
                 <strong>{{ project.name }}</strong>
                 <span>{{ project.owner }}</span>
@@ -138,7 +176,11 @@
             </div>
           </div>
           <div class="policy-stack">
-            <label v-for="policy in policies" :key="policy.name" class="policy-item">
+            <label
+              v-for="policy in policies"
+              :key="policy.name"
+              class="policy-item"
+            >
               <el-switch v-model="policy.enabled" />
               <div>
                 <strong>{{ policy.name }}</strong>
@@ -157,11 +199,22 @@ import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { clearLoginSession, getUsername } from '@/utils/auth'
+import StudyDemo from '@/components/StudyDemo.vue'
 
 const router = useRouter()
 const username = getUsername()
 const activeRange = ref('7D')
+const latestStudyCount = ref(0)
 
+const handleStudyCompleted = (count: number) => {
+  latestStudyCount.value = count
+  ElMessage.success(`已完成第 ${count} 次学习`)
+}
+
+const handleStudyReset = () => {
+  latestStudyCount.value = 0
+  ElMessage.info('学习记录已重置')
+}
 const metrics = [
   { label: '今日消耗', value: '86.2 万', trend: '+8.4%' },
   { label: '剩余额度', value: '715.4 万', trend: '-12.8%' },
@@ -187,16 +240,52 @@ const projects = [
 ]
 
 const activities = [
-  { id: 1, name: 'batch-image-embedding', model: 'embedding-v1', tokens: '42,184', time: '2 min', status: 'ok' },
-  { id: 2, name: 'semantic-search-prod', model: 'retrieval-v2', tokens: '18,932', time: '9 min', status: 'warn' },
-  { id: 3, name: 'report-agent', model: 'reasoning-lite', tokens: '8,405', time: '16 min', status: 'ok' },
-  { id: 4, name: 'nightly-import', model: 'embedding-v1', tokens: '96,118', time: '31 min', status: 'hot' },
+  {
+    id: 1,
+    name: 'batch-image-embedding',
+    model: 'embedding-v1',
+    tokens: '42,184',
+    time: '2 min',
+    status: 'ok',
+  },
+  {
+    id: 2,
+    name: 'semantic-search-prod',
+    model: 'retrieval-v2',
+    tokens: '18,932',
+    time: '9 min',
+    status: 'warn',
+  },
+  {
+    id: 3,
+    name: 'report-agent',
+    model: 'reasoning-lite',
+    tokens: '8,405',
+    time: '16 min',
+    status: 'ok',
+  },
+  {
+    id: 4,
+    name: 'nightly-import',
+    model: 'embedding-v1',
+    tokens: '96,118',
+    time: '31 min',
+    status: 'hot',
+  },
 ]
 
 const policies = reactive([
-  { name: '超过预算 80% 自动告警', desc: '发送站内提醒并标记项目风险', enabled: true },
+  {
+    name: '超过预算 80% 自动告警',
+    desc: '发送站内提醒并标记项目风险',
+    enabled: true,
+  },
   { name: '夜间批量任务限流', desc: '防止离线任务挤占线上额度', enabled: true },
-  { name: '异常峰值二次确认', desc: '单任务消耗突增时暂停执行', enabled: false },
+  {
+    name: '异常峰值二次确认',
+    desc: '单任务消耗突增时暂停执行',
+    enabled: false,
+  },
 ])
 
 const logout = async () => {
@@ -212,8 +301,16 @@ const logout = async () => {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
   background:
-    radial-gradient(circle at 28% 4%, rgba(20, 184, 166, 0.28), transparent 24%),
-    radial-gradient(circle at 78% 18%, rgba(249, 115, 22, 0.16), transparent 22%),
+    radial-gradient(
+      circle at 28% 4%,
+      rgba(20, 184, 166, 0.28),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 78% 18%,
+      rgba(249, 115, 22, 0.16),
+      transparent 22%
+    ),
     linear-gradient(135deg, #06111f 0%, #111827 48%, #172033 100%);
   color: #f8fafc;
 }
@@ -438,7 +535,11 @@ h1 {
   justify-self: center;
   border-radius: 50%;
   background:
-    conic-gradient(from 210deg, #14b8a6 0 64%, rgba(148, 163, 184, 0.16) 64% 100%),
+    conic-gradient(
+      from 210deg,
+      #14b8a6 0 64%,
+      rgba(148, 163, 184, 0.16) 64% 100%
+    ),
     radial-gradient(circle, rgba(37, 99, 235, 0.22), rgba(15, 23, 42, 0.2));
   box-shadow: 0 0 52px rgba(20, 184, 166, 0.34);
 }
